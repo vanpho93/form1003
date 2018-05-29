@@ -21,7 +21,10 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
                 formControlName="password"
                 type="password"
             />
-            <br/>
+            <div style="margin: 10px;">
+                <br *ngIf="password.valid"/>
+                <i *ngIf="password.invalid">Password không hợp lệ</i>
+            </div>
             <button class="btn btn-success" [disabled]="formSignIn.invalid">
                 Sign In
             </button>
@@ -48,5 +51,9 @@ export class SignInComponent {
 
     get email() {
         return this.formSignIn.get('email');
+    }
+
+    get password() {
+        return this.formSignIn.get('password');
     }
 }
