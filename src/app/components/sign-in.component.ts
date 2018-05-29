@@ -12,8 +12,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
                 formControlName="email"
             />
             <div style="margin: 10px;">
-                <br *ngIf="email.valid"/>
-                <i *ngIf="email.invalid">Email không hợp lệ</i>
+                <i *ngIf="email.invalid && email.touched">Email không hợp lệ</i>
             </div>
             <input
                 class="form-control"
@@ -22,8 +21,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
                 type="password"
             />
             <div style="margin: 10px;">
-                <br *ngIf="password.valid"/>
-                <i *ngIf="password.invalid">Password không hợp lệ</i>
+                <i *ngIf="password.invalid && password.touched">Password không hợp lệ</i>
             </div>
             <button class="btn btn-success" [disabled]="formSignIn.invalid">
                 Sign In
@@ -32,7 +30,11 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
         <pre>{{ formSignIn.value | json }}</pre>
         <pre>VALID: {{ formSignIn.valid }}</pre>
   `,
-  styles: [`form { width: 300px; } i { color: red; }`]
+  styles: [`
+      form { width: 300px; }
+      i { color: red; }
+      input.ng-touched.ng-invalid { border-color: red }`
+    ]
 })
 
 export class SignInComponent {
@@ -40,7 +42,7 @@ export class SignInComponent {
 
     constructor(private fb: FormBuilder) {
         this.formSignIn = this.fb.group({
-            email: ['', [Validators.email, Validators.required]],
+            email: ['', [Validators.email, Validators.required, gmail]],
             password: ['', [Validators.minLength(5), Validators.required]]
         });
     }
@@ -56,4 +58,10 @@ export class SignInComponent {
     get password() {
         return this.formSignIn.get('password');
     }
+}
+
+function gmail(control: FormControl) {
+    const value = control.value as string;
+    if (value.trim().endsWith('@gmail.com')) return null;
+    return { error: 'gmail' };
 }
