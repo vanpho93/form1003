@@ -11,7 +11,10 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
                 placeholder="Email"
                 formControlName="email"
             />
-            <br/>
+            <div style="margin: 10px;">
+                <br *ngIf="email.valid"/>
+                <i *ngIf="email.invalid">Email không hợp lệ</i>
+            </div>
             <input
                 class="form-control"
                 placeholder="Password"
@@ -26,7 +29,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
         <pre>{{ formSignIn.value | json }}</pre>
         <pre>VALID: {{ formSignIn.valid }}</pre>
   `,
-  styles: [`form { width: 300px; }`]
+  styles: [`form { width: 300px; } i { color: red; }`]
 })
 
 export class SignInComponent {
@@ -41,5 +44,9 @@ export class SignInComponent {
 
     signIn() {
         alert(JSON.stringify(this.formSignIn.value));
+    }
+
+    get email() {
+        return this.formSignIn.get('email');
     }
 }
